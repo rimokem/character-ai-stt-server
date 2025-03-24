@@ -85,7 +85,7 @@ def main() -> None:
 
     # FastAPIサーバーを別スレッドで起動
     Thread(
-        target=lambda: uvicorn.run(app, host="0.0.0.0", port=8000), daemon=True
+        target=lambda: uvicorn.run(app, host="0.0.0.0", port=4113), daemon=True
     ).start()
 
     # メインループ
