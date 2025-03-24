@@ -5,7 +5,7 @@ from dataclasses import dataclass
 class AudioConfig:
     """録音設定を保持するデータクラス"""
 
-    threshold: float = 0.03
+    threshold: float = 0.01
     silence_duration: float = 1.0
     max_duration: float = 30
     sample_rate: int = 16000
