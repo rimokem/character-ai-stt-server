@@ -99,7 +99,7 @@ def main() -> None:
             recording, sample_rate = system.record_audio()
 
             # 録音データが存在する場合のみ処理を継続
-            if recording.any():
+            if recording.any() and is_up:
                 # 文字起こしの実行（録音データは保存せず直接処理）
                 system.transcribe_audio(recording, sample_rate)
                 logging.info("次の録音の準備ができました。")

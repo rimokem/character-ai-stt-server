@@ -73,7 +73,7 @@ wheels = [
 ]
 
 [[package]]
-name = "charcter-ai-tts-server"
+name = "charcter-ai-stt-server"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
