@@ -2,10 +2,31 @@ import logging
 from typing import Tuple
 from dataclasses import dataclass
 import numpy as np
+import time
+from fastapi import FastAPI
+import uvicorn
+from threading import Thread
 
 from audio_config import AudioConfig
 from audio_recorder import AudioRecorder
 from audio_transcription import TranscriptionHandler
+
+is_up = True
+app = FastAPI()
+
+
+@app.post("/start")
+async def start_recording():
+    global is_up
+    is_up = True
+    return {"status": "recording started"}
+
+
+@app.post("/stop")
+async def stop_recording():
+    global is_up
+    is_up = False
+    return {"status": "recording stopped"}
 
 
 @dataclass
@@ -62,8 +83,16 @@ def main() -> None:
     # システムの初期化
     system = RecordingSystem.initialize()
 
+    # FastAPIサーバーを別スレッドで起動
+    Thread(
+        target=lambda: uvicorn.run(app, host="0.0.0.0", port=8000), daemon=True
+    ).start()
+
     # メインループ
     while True:
+        if not is_up:
+            time.sleep(1)
+            continue
         try:
             # 録音の実行
             logging.info("\n録音を開始します...")

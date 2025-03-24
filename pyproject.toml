@@ -1,5 +1,5 @@
 [project]
-name = "charcter-ai-tts-server"
+name = "charcter-ai-stt-server"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
