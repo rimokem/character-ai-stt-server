@@ -3,6 +3,7 @@ from typing import Tuple
 from dataclasses import dataclass
 import numpy as np
 import time
+import requests
 from fastapi import FastAPI
 import uvicorn
 from threading import Thread
@@ -69,6 +70,23 @@ class RecordingSystem:
             logging.info("音声を文字起こししています...")
             transcription = self.transcriber.transcribe(temp_path)
             logging.info(f"文字起こし結果:\n{transcription}")
+
+            # 文字起こし結果を外部サーバーに送信
+            try:
+                response = requests.post(
+                    "http://localhost:4114/transcript",
+                    json={"text": transcription},
+                    timeout=5,
+                )
+                if response.status_code == 200:
+                    logging.info("文字起こし結果を外部サーバーに送信しました")
+                else:
+                    logging.error(
+                        f"外部サーバーへの送信に失敗しました: {response.status_code}"
+                    )
+            except requests.exceptions.RequestException as e:
+                logging.error(f"外部サーバーへの接続に失敗しました: {e}")
+
             return transcription
         finally:
             # 一時ファイルを削除
